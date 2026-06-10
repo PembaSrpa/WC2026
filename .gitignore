@@ -1,0 +1,31 @@
+# Node dependencies and build outputs
+App/node_modules/
+App/.next/
+App/out/
+App/build/
+
+# Python artifacts and virtual environments
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+Pemba/venv/
+Pemba/.venv/
+env/
+.env/
+
+# Data and ML model artifacts
+Pemba/data/
+Pemba/models/
+Pemba/predictions/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+App/.env.local
+
+# Operating system files
+.DS_Store
+Thumbs.db
