@@ -9,7 +9,6 @@ import shap
 from xgboost import XGBRegressor
 
 from config import (
-    DATA_PROCESSED,
     FEATURE_COLS,
     MODELS_DIR,
     TARGETS,
@@ -38,23 +37,23 @@ def normalize_preds(raw: np.ndarray) -> np.ndarray:
     return clipped / total
 
 
-def split_data(
-    df: pd.DataFrame,
-) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def split_data(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     df = df.copy()
     df["date"] = pd.to_datetime(df["date"])
     train = df[df["date"] <= TRAIN_END_DATE]
     val = df[(df["date"] > TRAIN_END_DATE) & (df["date"] <= VAL_END_DATE)]
     test = df[df["date"] > VAL_END_DATE]
-    logger.info("Split — train: %d, val: %d, test: %d", len(train), len(val), len(test))
+    logger.info("Split — train: %d  val: %d  test: %d", len(train), len(val), len(test))
     return train, val, test
 
 
-def train(df: pd.DataFrame) -> tuple[dict[str, XGBRegressor], dict[str, shap.TreeExplainer], dict[str, float]]:
+def train(
+    df: pd.DataFrame,
+) -> tuple[dict[str, XGBRegressor], dict[str, shap.TreeExplainer], dict[str, float]]:
     train_df, val_df, _ = split_data(df)
 
-    if train_df.empty:
-        raise ValueError("Training set is empty")
+    if len(train_df) < 10:
+        raise ValueError(f"Training set too small: {len(train_df)} rows")
 
     X_train = train_df[FEATURE_COLS].astype(float)
     X_val = val_df[FEATURE_COLS].astype(float) if not val_df.empty else None
@@ -65,15 +64,11 @@ def train(df: pd.DataFrame) -> tuple[dict[str, XGBRegressor], dict[str, shap.Tre
 
     for target in TARGETS:
         y_train = train_df[target].astype(float)
-
         model = XGBRegressor(**XGB_PARAMS)
+
         if X_val is not None and not val_df.empty:
             y_val = val_df[target].astype(float)
-            model.fit(
-                X_train, y_train,
-                eval_set=[(X_val, y_val)],
-                verbose=False,
-            )
+            model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
             val_mse = float(np.mean((model.predict(X_val) - y_val.values) ** 2))
             metrics[f"val_mse_{target}"] = val_mse
             logger.info("Val MSE [%s]: %.6f", target, val_mse)
@@ -89,7 +84,7 @@ def train(df: pd.DataFrame) -> tuple[dict[str, XGBRegressor], dict[str, shap.Tre
         actuals = val_df[TARGETS].values
         val_rps = rps_dataset(norm, actuals)
         metrics["val_rps"] = val_rps
-        logger.info("Val RPS: %.6f", val_rps)
+        logger.info("Val RPS: %.6f  (lower is better, random = 0.333)", val_rps)
 
     return models, explainers, metrics
 
@@ -119,13 +114,10 @@ def load() -> tuple[dict[str, XGBRegressor], dict[str, shap.TreeExplainer]]:
     return models, explainers
 
 
-def evaluate_test(
-    df: pd.DataFrame,
-    models: dict[str, XGBRegressor],
-) -> float | None:
+def evaluate_test(df: pd.DataFrame, models: dict[str, XGBRegressor]) -> float | None:
     _, _, test_df = split_data(df)
     if test_df.empty:
-        logger.info("No test data yet")
+        logger.info("No test data yet — will evaluate after WC 2026 matches are played")
         return None
     X_test = test_df[FEATURE_COLS].astype(float)
     raw = np.column_stack([models[t].predict(X_test.values) for t in TARGETS])

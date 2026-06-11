@@ -7,7 +7,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
-from config import FEATURE_COLS, PREDICTIONS_DIR, TARGETS
+from config import FEATURE_COLS, FD_STAGE_MAP, PREDICTIONS_DIR, TARGETS
 from features import build_prediction_features
 from train import load, normalize_preds
 
@@ -29,8 +29,11 @@ def predict_fixtures(
     elo_data: dict,
     stage: str,
 ) -> list[dict]:
-    models, explainers = load()
+    if not fixtures:
+        logger.warning("No fixtures to predict")
+        return []
 
+    models, explainers = load()
     feat_df = build_prediction_features(fixtures, elo_data)
     X = feat_df[FEATURE_COLS].astype(float).values
 
@@ -39,8 +42,10 @@ def predict_fixtures(
 
     results: list[dict] = []
     for i, fix in enumerate(fixtures):
-        p_win, p_draw, p_loss = float(norm[i, 0]), float(norm[i, 1]), float(norm[i, 2])
-        shap_vals = _shap_for_match(explainers, X[i:i+1], FEATURE_COLS)
+        p_win = round(float(norm[i, 0]), 4)
+        p_draw = round(float(norm[i, 1]), 4)
+        p_loss = round(float(norm[i, 2]), 4)
+        shap_vals = _shap_for_match(explainers, X[i:i + 1], FEATURE_COLS)
 
         results.append({
             "match_id": fix["match_id"],
@@ -48,14 +53,15 @@ def predict_fixtures(
             "team_b": fix["team_b"],
             "stage": stage,
             "match_date": fix["match_date"].strftime("%Y-%m-%d")
-            if isinstance(fix["match_date"], datetime) else str(fix["match_date"]),
-            "p_win": round(p_win, 4),
-            "p_draw": round(p_draw, 4),
-            "p_loss": round(p_loss, 4),
+            if isinstance(fix["match_date"], datetime)
+            else str(fix["match_date"]),
+            "p_win": p_win,
+            "p_draw": p_draw,
+            "p_loss": p_loss,
             "shap_values": shap_vals,
         })
         logger.info(
-            "%s vs %s — win: %.3f draw: %.3f loss: %.3f",
+            "%s vs %s — win: %.3f  draw: %.3f  loss: %.3f",
             fix["team_a"], fix["team_b"], p_win, p_draw, p_loss,
         )
 
@@ -70,10 +76,19 @@ def write_predictions(predictions: list[dict], stage: str) -> None:
 
 
 def load_wc2026_fixtures(fd_matches: pd.DataFrame, stage: str) -> list[dict]:
+    fd_stage = FD_STAGE_MAP.get(stage, "GROUP_STAGE")
     upcoming = fd_matches[
         (fd_matches["status"].isin(["TIMED", "SCHEDULED"]))
-        & (fd_matches["stage"] == stage)
+        & (fd_matches["stage"] == fd_stage)
     ].copy()
+
+    if upcoming.empty:
+        logger.warning(
+            "No upcoming fixtures found for stage '%s' (fd_stage='%s'). "
+            "Available stages: %s",
+            stage, fd_stage, fd_matches["stage"].unique().tolist(),
+        )
+        return []
 
     fixtures: list[dict] = []
     for _, row in upcoming.iterrows():

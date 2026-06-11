@@ -13,29 +13,17 @@ for d in [DATA_RAW, DATA_PROCESSED, MODELS_DIR, PREDICTIONS_DIR]:
 FD_API_KEY = os.environ.get("FD_API_KEY", "")
 FD_BASE_URL = "https://api.football-data.org/v4"
 
-FD_COMPETITIONS = {
-    "WC": 2000,
-    "EC": 2018,
-    "CA": 2152,
-}
-
-FD_SEASONS = {
-    "WC": [2018, 2022, 2026],
-    "EC": [2020, 2024],
-    "CA": [2021, 2024],
-}
-
 ELO_BASE_URL = "https://www.eloratings.net"
 ELO_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Referer": "https://www.eloratings.net/",
 }
 
 TOP_ELO_THRESHOLD = 1900.0
 MIN_MATCH_DATE = "2010-01-01"
-FRIENDLY_CODES = {"F", "FR"}
 
-TRAIN_END_DATE = "2024-12-31"
+TRAIN_END_DATE = "2023-12-31"
 VAL_END_DATE = "2025-12-31"
 
 XGB_PARAMS = {
@@ -101,3 +89,12 @@ WC2026_TEAMS = [
     "Turkey", "Norway", "Ukraine", "DR Congo", "Mali", "Venezuela",
     "Panama", "Honduras", "Jamaica", "Bahrain", "Indonesia", "Bolivia",
 ]
+
+FD_STAGE_MAP = {
+    "group": "GROUP_STAGE",
+    "r32": "LAST_32",
+    "r16": "LAST_16",
+    "qf": "QUARTER_FINALS",
+    "sf": "SEMI_FINALS",
+    "final": "FINAL",
+}

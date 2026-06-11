@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from datetime import datetime
 
-import numpy as np
 import pandas as pd
 
 from config import (
@@ -11,10 +10,8 @@ from config import (
     FEATURE_COLS,
     MIN_MATCH_DATE,
     STAGE_ENCODING,
-    TARGETS,
     TOP_ELO_THRESHOLD,
 )
-from scrape import fetch_all_elo, fetch_all_fd_matches, normalize_odds
 
 logger = logging.getLogger(__name__)
 
@@ -65,40 +62,37 @@ def _h2h(
     before_date: datetime,
     n: int = 5,
 ) -> float | None:
-    df_a = elo_data.get(team_a)
-    if df_a is None:
+    df = elo_data.get(team_a)
+    if df is None:
         return None
-    sub = _before(df_a, before_date)
-    sub = sub[sub["opponent"] == team_b].head(n)
+    sub = _before(df, before_date)
+    sub = sub[sub["opponent"] == team_b].dropna(subset=["result"]).head(n)
     if sub.empty:
         return None
-    sub = sub.dropna(subset=["result"])
-    if sub.empty:
-        return None
-    wins = (sub["result"] == "W").sum()
-    return float(wins) / len(sub)
+    return float((sub["result"] == "W").sum()) / len(sub)
 
 
-def build_team_features(
+def _team_features(
     team: str,
     before_date: datetime,
     elo_data: dict[str, pd.DataFrame],
 ) -> dict[str, float | None]:
     df = elo_data.get(team)
     if df is None:
-        return {col: None for col in [
-            "elo", "ppg_last5", "ppg_last10",
-            "goals_scored_last5", "goals_scored_last10",
-            "goals_conceded_last5", "goals_conceded_last10",
-            "win_rate_vs_top", "defensive_solidity",
-        ]}
+        return {
+            "elo": None, "ppg_last5": None, "ppg_last10": None,
+            "goals_scored_last5": None, "goals_scored_last10": None,
+            "goals_conceded_last5": None, "goals_conceded_last10": None,
+            "win_rate_vs_top": None, "defensive_solidity": None,
+        }
 
-    comp = _competitive(_before(df, before_date))
+    hist = _before(df, before_date)
+    comp = _competitive(hist)
     two_years_ago = pd.Timestamp(before_date) - pd.DateOffset(years=2)
     comp_2yr = comp[comp["date"] >= two_years_ago]
 
     return {
-        "elo": _latest_elo(_before(df, before_date)),
+        "elo": _latest_elo(hist),
         "ppg_last5": _ppg(comp, 5),
         "ppg_last10": _ppg(comp, 10),
         "goals_scored_last5": _avg(comp, "goals_for", 5),
@@ -117,8 +111,8 @@ def build_match_features(
     stage: str,
     elo_data: dict[str, pd.DataFrame],
 ) -> dict[str, float | None]:
-    fa = build_team_features(team_a, match_date, elo_data)
-    fb = build_team_features(team_b, match_date, elo_data)
+    fa = _team_features(team_a, match_date, elo_data)
+    fb = _team_features(team_b, match_date, elo_data)
     h2h = _h2h(elo_data, team_a, team_b, match_date)
 
     elo_a = fa["elo"]
@@ -150,49 +144,48 @@ def build_match_features(
     }
 
 
-def build_training_matrix(
-    elo_data: dict[str, pd.DataFrame],
-    fd_matches: pd.DataFrame,
-) -> pd.DataFrame:
-    fd_matches = fd_matches.copy()
-    fd_matches = fd_matches[fd_matches["status"] == "FINISHED"]
-    fd_matches = fd_matches[fd_matches["date"] >= MIN_MATCH_DATE]
-    fd_matches = fd_matches.dropna(subset=["goals_home", "goals_away"])
-    fd_matches = fd_matches.dropna(subset=["odds_home_win", "odds_draw", "odds_away_win"])
-
+def build_training_matrix(elo_data: dict[str, pd.DataFrame]) -> pd.DataFrame:
     rows: list[dict] = []
-    for _, match in fd_matches.iterrows():
-        p_win, p_draw, p_loss = normalize_odds(match)
-        if p_win is None:
-            continue
 
-        features = build_match_features(
-            team_a=match["team_home"],
-            team_b=match["team_away"],
-            match_date=match["date"].to_pydatetime(),
-            stage=match["stage"],
-            elo_data=elo_data,
-        )
+    for team, df in elo_data.items():
+        comp = _competitive(df)
+        comp = comp[comp["date"] >= MIN_MATCH_DATE]
+        comp = comp.dropna(subset=["result", "goals_for", "goals_against"])
 
-        row = {
-            "match_id": match["match_id"],
-            "date": match["date"],
-            "team_home": match["team_home"],
-            "team_away": match["team_away"],
-            "competition": match["competition"],
-            "stage": match["stage"],
-            "p_win": p_win,
-            "p_draw": p_draw,
-            "p_loss": p_loss,
-            **features,
-        }
-        rows.append(row)
+        for _, match in comp.iterrows():
+            opponent = match["opponent"]
+            if opponent not in elo_data:
+                continue
 
-    df = pd.DataFrame(rows)
+            features = build_match_features(
+                team_a=team,
+                team_b=opponent,
+                match_date=match["date"].to_pydatetime(),
+                stage="GROUP_STAGE",
+                elo_data=elo_data,
+            )
+
+            result = match["result"]
+            row = {
+                "team_a": team,
+                "team_b": opponent,
+                "date": match["date"],
+                "result": result,
+                "p_win": 1.0 if result == "W" else 0.0,
+                "p_draw": 1.0 if result == "D" else 0.0,
+                "p_loss": 1.0 if result == "L" else 0.0,
+                **features,
+            }
+            rows.append(row)
+
+    df_out = pd.DataFrame(rows).drop_duplicates(
+        subset=["team_a", "team_b", "date"]
+    ).reset_index(drop=True)
+
     out_path = DATA_PROCESSED / "training_matrix.csv"
-    df.to_csv(out_path, index=False)
-    logger.info("Training matrix: %d rows saved to %s", len(df), out_path)
-    return df
+    df_out.to_csv(out_path, index=False)
+    logger.info("Training matrix: %d rows saved to %s", len(df_out), out_path)
+    return df_out
 
 
 def build_prediction_features(
@@ -208,13 +201,12 @@ def build_prediction_features(
             stage=fix["stage"],
             elo_data=elo_data,
         )
-        row = {
+        rows.append({
             "match_id": fix["match_id"],
             "team_a": fix["team_a"],
             "team_b": fix["team_b"],
             "stage": fix["stage"],
             "match_date": fix["match_date"],
             **features,
-        }
-        rows.append(row)
+        })
     return pd.DataFrame(rows)

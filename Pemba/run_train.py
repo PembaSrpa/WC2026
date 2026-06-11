@@ -2,10 +2,10 @@ import logging
 import sys
 sys.path.insert(0, "src")
 
-from scrape import fetch_all_elo, fetch_all_fd_matches
+from config import FD_API_KEY
+from scrape import fetch_all_elo
 from features import build_training_matrix
 from train import train, save, evaluate_test
-from config import FD_API_KEY
 
 logging.basicConfig(
     level=logging.INFO,
@@ -20,30 +20,23 @@ def main() -> None:
         logger.error("FD_API_KEY environment variable not set")
         sys.exit(1)
 
-    logger.info("Step 1/4 — Fetching Elo match history")
+    logger.info("Step 1/3 — Fetching Elo match history for all teams")
     elo_data = fetch_all_elo()
 
-    logger.info("Step 2/4 — Fetching football-data.org matches")
-    fd_matches = fetch_all_fd_matches()
-    if fd_matches.empty:
-        logger.error("No match data fetched from football-data.org")
+    if not elo_data:
+        logger.error("No Elo data fetched. Check internet connection.")
         sys.exit(1)
 
-    finished = fd_matches[fd_matches["status"] == "FINISHED"]
-    with_odds = finished.dropna(subset=["odds_home_win", "odds_draw", "odds_away_win"])
-    logger.info(
-        "Finished matches: %d, with odds: %d",
-        len(finished), len(with_odds),
-    )
+    logger.info("Step 2/3 — Building training matrix")
+    df = build_training_matrix(elo_data)
 
-    logger.info("Step 3/4 — Building feature matrix")
-    df = build_training_matrix(elo_data, fd_matches)
     if df.empty:
-        logger.error("Feature matrix is empty — no matches with odds found")
+        logger.error("Training matrix is empty.")
         sys.exit(1)
+
     logger.info("Training matrix: %d rows, %d features", len(df), len(df.columns))
 
-    logger.info("Step 4/4 — Training models")
+    logger.info("Step 3/3 — Training models")
     models, explainers, metrics = train(df)
     save(models, explainers)
 

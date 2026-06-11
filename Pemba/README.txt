@@ -1,36 +1,46 @@
 WC2026 Match Outcome Predictor
 ===============================
 
+HOW IT WORKS
+------------
+- Scrapes full match history for all WC teams from eloratings.net
+- Builds features: Elo, PPG, goals, win rates, H2H — all date-gated (no leakage)
+- Target variable: actual match results (W=1/D=1/L=1 one-hot)
+- Trains 3 XGBoost models: one each for p_win, p_draw, p_loss
+- Predicts upcoming WC 2026 fixtures from football-data.org
+- Outputs one JSON file per stage to predictions/
+
+
 SETUP
 -----
-1. Install dependencies:
-   pip install -r requirements.txt
+1. pip install -r requirements.txt
 
-2. Set your football-data.org API key:
+2. Set environment variables (run before each session):
+
    Windows PowerShell:
-   $env:FD_API_KEY="your_key_here"
+   $env:FD_API_KEY="your_football_data_org_key"
 
    Mac/Linux:
-   export FD_API_KEY="your_key_here"
+   export FD_API_KEY="your_football_data_org_key"
 
 
-TRAIN THE MODEL (run once before the tournament)
--------------------------------------------------
+TRAIN (run once before the tournament)
+---------------------------------------
    python run_train.py
 
-This will:
-- Scrape match history for all 48 WC teams from eloratings.net
-- Download WC/Euros/Copa America match results + odds from football-data.org
-- Build a feature matrix
-- Train 3 XGBoost models (p_win, p_draw, p_loss)
-- Save models to models/
-- Print RPS evaluation score
+First run: ~10-15 minutes (scrapes eloratings for 48 teams, cached after)
+Subsequent runs: ~2 minutes (uses cache)
 
-First run takes ~10 minutes (scraping). Subsequent runs use cache.
+Output:
+- models/model_p_win.json
+- models/model_p_draw.json
+- models/model_p_loss.json
+- models/explainers.pkl
+- data/processed/training_matrix.csv
 
 
-PREDICT A STAGE (run before each of the 6 stages)
---------------------------------------------------
+PREDICT (run before each of the 6 stages)
+------------------------------------------
    python run_predict.py --stage group
    python run_predict.py --stage r32
    python run_predict.py --stage r16
@@ -38,18 +48,14 @@ PREDICT A STAGE (run before each of the 6 stages)
    python run_predict.py --stage sf
    python run_predict.py --stage final
 
-This will:
-- Refresh Elo data from cache (re-scrapes if cache is stale)
-- Fetch latest WC 2026 fixtures from football-data.org
-- Compute features for each upcoming match
-- Write predictions to predictions/predictions_{stage}.json
-
-To force a full data refresh (ignore cache):
+Force fresh data (re-scrapes eloratings):
    python run_predict.py --stage r16 --no-cache
 
+Output: predictions/predictions_{stage}.json
 
-OUTPUT FORMAT (predictions/predictions_{stage}.json)
------------------------------------------------------
+
+OUTPUT FORMAT
+-------------
 [
   {
     "match_id": "537327",
@@ -68,10 +74,19 @@ OUTPUT FORMAT (predictions/predictions_{stage}.json)
   }
 ]
 
-Commit this file to your repo and Vercel picks it up automatically.
+
+DEPLOYING TO VERCEL
+-------------------
+1. Copy predictions/predictions_{stage}.json to your Next.js project:
+   your-nextjs-app/public/predictions/predictions_{stage}.json
+
+2. git add . && git commit -m "add {stage} predictions" && git push
+
+3. Vercel auto-deploys. Frontend reads it at:
+   /predictions/predictions_{stage}.json
 
 
 DATA SOURCES
 ------------
-- eloratings.net  — match history, Elo ratings, scores (scraped via TSV endpoint)
-- football-data.org — WC/Euros/Copa America results + odds (API, free tier)
+eloratings.net  — match history, scores, Elo ratings per team (TSV endpoint)
+football-data.org — WC 2026 fixture schedule (free API tier)
