@@ -6,8 +6,9 @@ DATA_RAW = BASE_DIR / "data" / "raw"
 DATA_PROCESSED = BASE_DIR / "data" / "processed"
 MODELS_DIR = BASE_DIR / "models"
 PREDICTIONS_DIR = BASE_DIR / "predictions"
+NEXTJS_PREDICTIONS_DIR = BASE_DIR.parent / "App" / "public" / "predictions"
 
-for d in [DATA_RAW, DATA_PROCESSED, MODELS_DIR, PREDICTIONS_DIR]:
+for d in [DATA_RAW, DATA_PROCESSED, MODELS_DIR, PREDICTIONS_DIR, NEXTJS_PREDICTIONS_DIR]:
     d.mkdir(parents=True, exist_ok=True)
 
 FD_API_KEY = os.environ.get("FD_API_KEY", "")

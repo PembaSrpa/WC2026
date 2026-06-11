@@ -69,10 +69,14 @@ def predict_fixtures(
 
 
 def write_predictions(predictions: list[dict], stage: str) -> None:
-    path = PREDICTIONS_DIR / f"predictions_{stage}.json"
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(predictions, f, indent=2, ensure_ascii=False)
-    logger.info("Predictions written to %s", path)
+    from config import NEXTJS_PREDICTIONS_DIR
+    filename = f"sunless_predictions_{stage}.json"
+
+    for out_dir in [PREDICTIONS_DIR, NEXTJS_PREDICTIONS_DIR]:
+        path = out_dir / filename
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(predictions, f, indent=2, ensure_ascii=False)
+        logger.info("Predictions written to %s", path)
 
 
 def load_wc2026_fixtures(fd_matches: pd.DataFrame, stage: str) -> list[dict]:
