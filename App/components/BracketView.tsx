@@ -1,51 +1,51 @@
-import type { BracketMatch } from "@/lib/types";
+"use client";
+import type { EnrichedMatch, MatchStage } from "@/lib/types";
+import { STAGE_LABEL } from "@/lib/types";
 
 const F = "'JetBrains Mono',monospace";
-const STAGE_LABELS: Record<string,string> = { r32:"R32",r16:"R16",qf:"QF",sf:"SF",final:"Final" };
-const STAGE_ORDER = ["r32","r16","qf","sf","final"];
+const KNOCKOUT_STAGES: MatchStage[] = ["LAST_32","LAST_16","QUARTER_FINALS","SEMI_FINALS","FINAL"];
 
-function BracketTeamRow({ team, isWinner, prob }: {
-  team: { id:string; name:string; flag:string } | null;
-  isWinner: boolean;
-  prob: string | null;
-}) {
-  return (
-    <div style={{
-      display:"flex",alignItems:"center",justifyContent:"space-between",
-      padding:"7px 10px",borderBottom:"1px solid #404040",fontSize:11,fontFamily:F,
-      background:isWinner?"#333":"transparent",
-      color:!team?"#404040":isWinner?"#f5f5f5":"#a3a3a3",
-      fontStyle:!team?"italic":"normal",fontWeight:isWinner?600:400,
-    }}>
-      <span>{team ? <><span style={{ marginRight:6 }}>{team.flag}</span>{team.name}</> : "TBD"}</span>
-      {prob && <span style={{ fontSize:10,color:"#525252",fontFamily:F }}>{prob}</span>}
-    </div>
-  );
-}
+function BracketMatch({ match }: { match: EnrichedMatch }) {
+  const isDone = match.status === "FINISHED";
+  const homeWon = isDone && match.goals_home! > match.goals_away!;
+  const awayWon = isDone && match.goals_away! > match.goals_home!;
 
-function BracketRound({ stage, matches }: { stage:string; matches:BracketMatch[] }) {
-  return (
-    <div style={{ minWidth:150,display:"flex",flexDirection:"column" as const,gap:10 }}>
-      <div style={{ textAlign:"center" as const,fontFamily:F,fontSize:9,fontWeight:700,letterSpacing:2,textTransform:"uppercase" as const,color:"#525252",marginBottom:4 }}>
-        {STAGE_LABELS[stage] ?? stage.toUpperCase()}
-      </div>
-      {matches.map(m => (
-        <div key={m.id} style={{ border:"1px solid #404040",borderRadius:6,overflow:"hidden",background:"#262626" }}>
-          <BracketTeamRow team={m.team_a} isWinner={m.winner_id!==null&&m.winner_id===m.team_a?.id} prob={m.model_p_win!==null?`${(m.model_p_win*100).toFixed(0)}%`:null} />
-          <BracketTeamRow team={m.team_b} isWinner={m.winner_id!==null&&m.winner_id===m.team_b?.id} prob={m.model_p_win!==null?`${((1-m.model_p_win)*100).toFixed(0)}%`:null} />
+  function TeamRow({ name, crest, won, pWin }: { name:string; crest:string; won:boolean; pWin:number|null }) {
+    return (
+      <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 10px",borderBottom:"1px solid #404040",fontSize:11,fontFamily:F,background:won?"#333":"transparent",color:won?"#f5f5f5":"#a3a3a3",fontWeight:won?600:400 }}>
+        <div style={{ display:"flex",alignItems:"center",gap:7 }}>
+          <img src={crest} alt={name} style={{ width:14,height:14,objectFit:"contain" }} onError={e=>(e.currentTarget.style.display="none")} />
+          <span>{name}</span>
         </div>
-      ))}
+        {pWin!==null && <span style={{ fontSize:10,color:"#525252",fontFamily:F }}>{(pWin*100).toFixed(0)}%</span>}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ border:"1px solid #404040",borderRadius:6,overflow:"hidden",background:"#262626" }}>
+      <TeamRow name={match.team_home} crest={match.team_home_crest} won={homeWon} pWin={match.sunless?.p_win??null} />
+      <TeamRow name={match.team_away} crest={match.team_away_crest} won={awayWon} pWin={match.sunless?.p_loss??null} />
     </div>
   );
 }
 
-export function BracketView({ bracket }: { bracket: Record<string,BracketMatch[]> }) {
+export function BracketView({ matches }: { matches: EnrichedMatch[] }) {
   return (
     <div style={{ overflowX:"auto" as const,paddingBottom:16 }}>
       <div style={{ display:"flex",gap:20,minWidth:"max-content",alignItems:"flex-start" }}>
-        {STAGE_ORDER.filter(s => bracket[s]?.length).map(stage => (
-          <BracketRound key={stage} stage={stage} matches={bracket[stage]} />
-        ))}
+        {KNOCKOUT_STAGES.map(stage => {
+          const stageMatches = matches.filter(m=>m.stage===stage);
+          if (!stageMatches.length) return null;
+          return (
+            <div key={stage} style={{ minWidth:160,display:"flex",flexDirection:"column" as const,gap:10 }}>
+              <div style={{ textAlign:"center" as const,fontFamily:F,fontSize:9,fontWeight:700,letterSpacing:2,textTransform:"uppercase" as const,color:"#525252",marginBottom:4 }}>
+                {STAGE_LABEL[stage]}
+              </div>
+              {stageMatches.map(m => <BracketMatch key={m.match_id} match={m} />)}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

@@ -1,13 +1,36 @@
-import type { GroupStanding } from "@/lib/types";
+"use client";
+import type { EnrichedMatch } from "@/lib/types";
 
 const F = "'JetBrains Mono',monospace";
 
-export function GroupTable({ group, standings }: { group: string; standings: GroupStanding[] }) {
-  const sorted = [...standings].sort((a,b) => {
-    if (b.points !== a.points) return b.points - a.points;
-    if ((b.gf-b.ga) !== (a.gf-a.ga)) return (b.gf-b.ga)-(a.gf-a.ga);
-    return b.gf - a.gf;
-  });
+type TeamStat = {
+  id: string;
+  name: string;
+  crest: string;
+  played: number; won: number; drawn: number; lost: number;
+  gf: number; ga: number; points: number;
+};
+
+function buildStandings(matches: EnrichedMatch[]): TeamStat[] {
+  const stats: Record<string, TeamStat> = {};
+  for (const m of matches) {
+    for (const [name, crest] of [[m.team_home, m.team_home_crest],[m.team_away, m.team_away_crest]] as [string,string][]) {
+      if (!stats[name]) stats[name] = { id:name,name,crest,played:0,won:0,drawn:0,lost:0,gf:0,ga:0,points:0 };
+    }
+    if (m.status !== "FINISHED") continue;
+    const gh = m.goals_home!; const ga = m.goals_away!;
+    stats[m.team_home].played++; stats[m.team_away].played++;
+    stats[m.team_home].gf += gh; stats[m.team_home].ga += ga;
+    stats[m.team_away].gf += ga; stats[m.team_away].ga += gh;
+    if (gh > ga) { stats[m.team_home].won++; stats[m.team_home].points+=3; stats[m.team_away].lost++; }
+    else if (gh < ga) { stats[m.team_away].won++; stats[m.team_away].points+=3; stats[m.team_home].lost++; }
+    else { stats[m.team_home].drawn++; stats[m.team_home].points+=1; stats[m.team_away].drawn++; stats[m.team_away].points+=1; }
+  }
+  return Object.values(stats).sort((a,b)=>b.points-a.points||(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf);
+}
+
+export function GroupTable({ group, matches }: { group: string; matches: EnrichedMatch[] }) {
+  const standings = buildStandings(matches);
   return (
     <div style={{ border:"1px solid #404040",borderRadius:8,overflow:"hidden",background:"#262626" }}>
       <div style={{ background:"#1a1a1a",borderBottom:"1px solid #404040",padding:"10px 14px" }}>
@@ -22,16 +45,19 @@ export function GroupTable({ group, standings }: { group: string; standings: Gro
           </tr>
         </thead>
         <tbody>
-          {sorted.map(s => (
-            <tr key={s.team.id} style={{ borderTop:"1px solid #404040" }}>
-              <td style={{ padding:"8px 10px 8px 14px",fontSize:11,fontWeight:500,color:s.qualified?"#e5e5e5":"#525252",fontFamily:F }}>
-                <span style={{ marginRight:6 }}>{s.team.flag}</span>{s.team.name}
-                {s.qualified && <span style={{ marginLeft:6,fontSize:9,color:"#a3a3a3" }}>✓</span>}
+          {standings.map((s,i) => (
+            <tr key={s.id} style={{ borderTop:"1px solid #404040" }}>
+              <td style={{ padding:"8px 10px 8px 14px",fontSize:11,fontWeight:500,color:i<2?"#e5e5e5":"#525252",fontFamily:F }}>
+                <div style={{ display:"flex",alignItems:"center",gap:8 }}>
+                  <img src={s.crest} alt={s.name} style={{ width:16,height:16,objectFit:"contain" }} onError={e=>(e.currentTarget.style.display="none")} />
+                  {s.name}
+                  {i<2 && <span style={{ fontSize:9,color:"#a3a3a3" }}>✓</span>}
+                </div>
               </td>
-              {[s.played,s.won,s.drawn,s.lost,s.gf,s.ga].map((v,i) => (
-                <td key={i} style={{ padding:"8px 10px",fontSize:11,textAlign:"center" as const,color:s.qualified?"#a3a3a3":"#525252",fontFamily:F }}>{v}</td>
+              {[s.played,s.won,s.drawn,s.lost,s.gf,s.ga].map((v,j) => (
+                <td key={j} style={{ padding:"8px 10px",fontSize:11,textAlign:"center" as const,color:i<2?"#a3a3a3":"#525252",fontFamily:F }}>{v}</td>
               ))}
-              <td style={{ padding:"8px 14px 8px 10px",fontSize:11,textAlign:"center" as const,fontWeight:700,color:s.qualified?"#e5e5e5":"#525252",fontFamily:F }}>{s.points}</td>
+              <td style={{ padding:"8px 14px 8px 10px",fontSize:11,textAlign:"center" as const,fontWeight:700,color:i<2?"#e5e5e5":"#525252",fontFamily:F }}>{s.points}</td>
             </tr>
           ))}
         </tbody>

@@ -1,3 +1,4 @@
+"use client";
 import type { LeaderboardRow } from "@/lib/types";
 import { modelTextColor } from "@/lib/utils";
 
@@ -10,28 +11,28 @@ export function LeaderboardTable({ rows }: { rows: LeaderboardRow[] }) {
       <thead>
         <tr style={{ borderBottom:"1px solid #404040" }}>
           {["Rank","Player","Type","RPS","Predicted","Accuracy"].map((h,i) => (
-            <th key={h} style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1.5,color:"#525252",textAlign:i===0||i===1?"left" as const:"center" as const,fontFamily:F }}>{h}</th>
+            <th key={h} style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1.5,color:"#525252",textAlign:i<2?"left" as const:"center" as const,fontFamily:F }}>{h}</th>
           ))}
         </tr>
       </thead>
       <tbody>
         {rows.map(r => {
-          const rankColor = r.rank===1 ? GOLD : r.rank===2 ? "#d4d4d4" : r.rank===3 ? "#a3a3a3" : "#525252";
+          const rankColor = r.rank===1?GOLD:r.rank===2?"#d4d4d4":r.rank===3?"#a3a3a3":"#525252";
           const tc = r.is_model ? modelTextColor(r.model_color) : "#d4d4d4";
           return (
             <tr key={r.user_id} style={{ borderTop:"1px solid #262626",transition:"background 0.1s" }}
-              onMouseEnter={e => (e.currentTarget.style.background="#262626")}
-              onMouseLeave={e => (e.currentTarget.style.background="transparent")}
+              onMouseEnter={e=>(e.currentTarget.style.background="#2a2a2a")}
+              onMouseLeave={e=>(e.currentTarget.style.background="transparent")}
             >
               <td style={{ padding:"12px 14px",fontSize:18,fontWeight:700,color:rankColor,fontFamily:F }}>{r.rank}</td>
               <td style={{ padding:"12px 14px" }}>
                 <div style={{ display:"flex",alignItems:"center",gap:8 }}>
-                  <div style={{ width:26,height:26,borderRadius:"50%",background:"#262626",border:"1px solid #404040",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:tc,fontFamily:F }}>{r.username[0]}</div>
+                  <div style={{ width:26,height:26,borderRadius:"50%",background:"#262626",border:"1px solid #404040",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:tc,fontFamily:F }}>{r.username[0].toUpperCase()}</div>
                   <span style={{ fontSize:12,color:tc,fontFamily:F }}>{r.username}</span>
                 </div>
               </td>
               <td style={{ padding:"12px 14px",textAlign:"center" as const }}>
-                <span style={{ fontSize:9,fontWeight:700,padding:"2px 6px",borderRadius:3,textTransform:"uppercase" as const,letterSpacing:1,fontFamily:F,background:"#262626",color:r.is_model?tc:"#525252",border:"1px solid #404040" }}>
+                <span style={{ fontSize:9,fontWeight:700,padding:"2px 6px",borderRadius:3,textTransform:"uppercase" as const,letterSpacing:1,fontFamily:F,background:"#1a1a1a",color:r.is_model?tc:"#525252",border:"1px solid #404040" }}>
                   {r.is_model?"model":"human"}
                 </span>
               </td>

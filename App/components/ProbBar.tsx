@@ -1,18 +1,22 @@
 "use client";
-import type { PredictionWithUser } from "@/lib/types";
 import { modelTextColor } from "@/lib/utils";
+import type { ModelColor } from "@/lib/types";
 
 const F = "'JetBrains Mono',monospace";
 
-export function ProbBar({ prediction }: { prediction: PredictionWithUser }) {
-  const { p_win, p_draw, p_loss, username, is_model, model_color } = prediction;
-  const tc = is_model ? modelTextColor(model_color) : "#d4d4d4";
+type Props = {
+  label: string;
+  color: ModelColor;
+  p_win: number;
+  p_draw: number;
+  p_loss: number;
+};
 
+export function ProbBar({ label, color, p_win, p_draw, p_loss }: Props) {
+  const tc = modelTextColor(color);
   return (
     <div style={{ border:"1px solid #404040",background:"#1a1a1a",borderRadius:6,padding:"10px 12px" }}>
-      <div style={{ fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1.5,color:tc,marginBottom:7,fontFamily:F }}>
-        {username}
-      </div>
+      <div style={{ fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1.5,color:tc,marginBottom:7,fontFamily:F }}>{label}</div>
       <div style={{ height:5,background:"#262626",borderRadius:3,display:"flex",overflow:"hidden",gap:2,marginBottom:6 }}>
         <div style={{ height:"100%",background:tc,borderRadius:2,width:`${p_win*100}%`,transition:"width 0.5s ease" }} />
         <div style={{ height:"100%",background:"#525252",borderRadius:2,width:`${p_draw*100}%`,transition:"width 0.5s ease" }} />
