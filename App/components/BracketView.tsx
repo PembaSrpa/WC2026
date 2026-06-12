@@ -1,48 +1,61 @@
 "use client";
 import type { EnrichedMatch, MatchStage } from "@/lib/types";
-import { STAGE_LABEL } from "@/lib/types";
+import { STAGE_LABEL, KNOCKOUT_STAGES } from "@/lib/types";
 
 const F = "'JetBrains Mono',monospace";
-const KNOCKOUT_STAGES: MatchStage[] = ["LAST_32","LAST_16","QUARTER_FINALS","SEMI_FINALS","FINAL"];
 
 function BracketMatch({ match }: { match: EnrichedMatch }) {
-  const isDone = match.status === "FINISHED";
-  const homeWon = isDone && match.goals_home! > match.goals_away!;
-  const awayWon = isDone && match.goals_away! > match.goals_home!;
+  const isDone = match.status==="FINISHED";
+  const homeWon = isDone && match.goals_home!>match.goals_away!;
+  const awayWon = isDone && match.goals_away!>match.goals_home!;
 
-  function TeamRow({ name, crest, won, pWin }: { name:string; crest:string; won:boolean; pWin:number|null }) {
+  function Row({ name, crest, won, prob }: { name:string; crest:string; won:boolean; prob:number|null }) {
     return (
-      <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 10px",borderBottom:"1px solid #404040",fontSize:11,fontFamily:F,background:won?"#333":"transparent",color:won?"#f5f5f5":"#a3a3a3",fontWeight:won?600:400 }}>
-        <div style={{ display:"flex",alignItems:"center",gap:7 }}>
-          <img src={crest} alt={name} style={{ width:14,height:14,objectFit:"contain" }} onError={e=>(e.currentTarget.style.display="none")} />
-          <span>{name}</span>
+      <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 10px",borderBottom:"1px solid #333",fontSize:11,fontFamily:F,background:won?"#333":"transparent",color:won?"#f5f5f5":"#d4d4d4",fontWeight:won?600:400 }}>
+        <div style={{ display:"flex",alignItems:"center",gap:6,minWidth:0 }}>
+          <img src={crest} alt={name} width={13} height={13} style={{ objectFit:"contain",flexShrink:0 }} onError={e=>(e.currentTarget.style.visibility="hidden")} />
+          <span style={{ overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" as const }}>{name}</span>
         </div>
-        {pWin!==null && <span style={{ fontSize:10,color:"#525252",fontFamily:F }}>{(pWin*100).toFixed(0)}%</span>}
+        {prob!==null&&<span style={{ fontSize:10,color:"#a3a3a3",fontFamily:F,flexShrink:0,marginLeft:6 }}>{(prob*100).toFixed(0)}%</span>}
       </div>
     );
   }
 
   return (
     <div style={{ border:"1px solid #404040",borderRadius:6,overflow:"hidden",background:"#262626" }}>
-      <TeamRow name={match.team_home} crest={match.team_home_crest} won={homeWon} pWin={match.sunless?.p_win??null} />
-      <TeamRow name={match.team_away} crest={match.team_away_crest} won={awayWon} pWin={match.sunless?.p_loss??null} />
+      <Row name={match.team_home} crest={match.team_home_crest} won={homeWon} prob={match.sunless?.p_win??null} />
+      <Row name={match.team_away} crest={match.team_away_crest} won={awayWon} prob={match.sunless?.p_loss??null} />
+    </div>
+  );
+}
+
+function TBDMatch() {
+  return (
+    <div style={{ border:"1px solid #333",borderRadius:6,overflow:"hidden",background:"#1e1e1e" }}>
+      {["",""].map((_,i)=>(
+        <div key={i} style={{ padding:"7px 10px",borderBottom:i===0?"1px solid #333":"none",fontSize:11,fontFamily:F,color:"#666",fontStyle:"italic" }}>TBD</div>
+      ))}
     </div>
   );
 }
 
 export function BracketView({ matches }: { matches: EnrichedMatch[] }) {
   return (
-    <div style={{ overflowX:"auto" as const,paddingBottom:16 }}>
-      <div style={{ display:"flex",gap:20,minWidth:"max-content",alignItems:"flex-start" }}>
-        {KNOCKOUT_STAGES.map(stage => {
-          const stageMatches = matches.filter(m=>m.stage===stage);
-          if (!stageMatches.length) return null;
+    <div style={{ overflowX:"auto",paddingBottom:16 }}>
+      <div style={{ display:"flex",gap:16,minWidth:"max-content",alignItems:"flex-start" }}>
+        {KNOCKOUT_STAGES.map(stage=>{
+          const sm = matches.filter(m=>m.stage===stage);
+          if (!sm.length) return null;
           return (
-            <div key={stage} style={{ minWidth:160,display:"flex",flexDirection:"column" as const,gap:10 }}>
-              <div style={{ textAlign:"center" as const,fontFamily:F,fontSize:9,fontWeight:700,letterSpacing:2,textTransform:"uppercase" as const,color:"#525252",marginBottom:4 }}>
+            <div key={stage} style={{ minWidth:155,display:"flex",flexDirection:"column" as const,gap:8 }}>
+              <div style={{ textAlign:"center" as const,fontFamily:F,fontSize:9,fontWeight:700,letterSpacing:2,textTransform:"uppercase" as const,color:"#a3a3a3",marginBottom:4 }}>
                 {STAGE_LABEL[stage]}
               </div>
-              {stageMatches.map(m => <BracketMatch key={m.match_id} match={m} />)}
+              {sm.map(m=>
+                m.team_home==="TBD"||!m.team_home
+                  ? <TBDMatch key={m.match_id} />
+                  : <BracketMatch key={m.match_id} match={m} />
+              )}
             </div>
           );
         })}

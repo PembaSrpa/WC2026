@@ -33,18 +33,6 @@ export type Prediction = {
 export type EnrichedMatch = Fixture & {
   sunless: Prediction | null;
   frank: Prediction | null;
-  my_pick: "win" | "draw" | "loss" | null;
-};
-
-export type LeaderboardRow = {
-  rank: number;
-  user_id: string;
-  username: string;
-  is_model: boolean;
-  model_color: ModelColor;
-  cumulative_rps: number;
-  matches_predicted: number;
-  accuracy: number;
 };
 
 export const STAGE_MAP: Record<MatchStage, string> = {
@@ -64,3 +52,5 @@ export const STAGE_LABEL: Record<MatchStage, string> = {
   SEMI_FINALS: "Semi Finals",
   FINAL: "Final",
 };
+
+export const KNOCKOUT_STAGES: MatchStage[] = ["LAST_32","LAST_16","QUARTER_FINALS","SEMI_FINALS","FINAL"];
