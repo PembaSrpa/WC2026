@@ -1,38 +1,38 @@
 {
-  "updated_at": "2026-06-11T08:03:14Z",
+  "updated_at": "2026-06-12T07:52:49Z",
   "total": 104,
   "matches": [
     {
       "match_id": "537327",
-      "date": "2026-06-11",
+      "date": "2026-06-12",
       "time_nst": "00:45",
-      "status": "TIMED",
+      "status": "FINISHED",
       "stage": "GROUP_STAGE",
       "group": "GROUP_A",
       "team_home": "Mexico",
       "team_home_crest": "https://crests.football-data.org/769.svg",
       "team_away": "South Africa",
       "team_away_crest": "https://crests.football-data.org/9396.svg",
-      "goals_home": null,
-      "goals_away": null
+      "goals_home": 2,
+      "goals_away": 0
     },
     {
       "match_id": "537328",
       "date": "2026-06-12",
       "time_nst": "07:45",
-      "status": "TIMED",
+      "status": "FINISHED",
       "stage": "GROUP_STAGE",
       "group": "GROUP_A",
       "team_home": "South Korea",
       "team_home_crest": "https://crests.football-data.org/772.png",
       "team_away": "Czechia",
       "team_away_crest": "https://crests.football-data.org/798.svg",
-      "goals_home": null,
-      "goals_away": null
+      "goals_home": 2,
+      "goals_away": 1
     },
     {
       "match_id": "537333",
-      "date": "2026-06-12",
+      "date": "2026-06-13",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -60,7 +60,7 @@
     },
     {
       "match_id": "537334",
-      "date": "2026-06-13",
+      "date": "2026-06-14",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -74,7 +74,7 @@
     },
     {
       "match_id": "537339",
-      "date": "2026-06-13",
+      "date": "2026-06-14",
       "time_nst": "03:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -130,7 +130,7 @@
     },
     {
       "match_id": "537357",
-      "date": "2026-06-14",
+      "date": "2026-06-15",
       "time_nst": "01:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -144,7 +144,7 @@
     },
     {
       "match_id": "537352",
-      "date": "2026-06-14",
+      "date": "2026-06-15",
       "time_nst": "04:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -186,7 +186,7 @@
     },
     {
       "match_id": "537363",
-      "date": "2026-06-15",
+      "date": "2026-06-16",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -200,7 +200,7 @@
     },
     {
       "match_id": "537370",
-      "date": "2026-06-15",
+      "date": "2026-06-16",
       "time_nst": "03:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -228,7 +228,7 @@
     },
     {
       "match_id": "537391",
-      "date": "2026-06-16",
+      "date": "2026-06-17",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -242,7 +242,7 @@
     },
     {
       "match_id": "537392",
-      "date": "2026-06-16",
+      "date": "2026-06-17",
       "time_nst": "03:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -298,7 +298,7 @@
     },
     {
       "match_id": "537409",
-      "date": "2026-06-17",
+      "date": "2026-06-18",
       "time_nst": "01:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -312,7 +312,7 @@
     },
     {
       "match_id": "537410",
-      "date": "2026-06-17",
+      "date": "2026-06-18",
       "time_nst": "04:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -354,7 +354,7 @@
     },
     {
       "match_id": "537335",
-      "date": "2026-06-18",
+      "date": "2026-06-19",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -368,7 +368,7 @@
     },
     {
       "match_id": "537336",
-      "date": "2026-06-18",
+      "date": "2026-06-19",
       "time_nst": "03:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -396,7 +396,7 @@
     },
     {
       "match_id": "537348",
-      "date": "2026-06-19",
+      "date": "2026-06-20",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -410,7 +410,7 @@
     },
     {
       "match_id": "537342",
-      "date": "2026-06-19",
+      "date": "2026-06-20",
       "time_nst": "03:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -466,7 +466,7 @@
     },
     {
       "match_id": "537353",
-      "date": "2026-06-20",
+      "date": "2026-06-21",
       "time_nst": "01:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -522,7 +522,7 @@
     },
     {
       "match_id": "537365",
-      "date": "2026-06-21",
+      "date": "2026-06-22",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -536,7 +536,7 @@
     },
     {
       "match_id": "537372",
-      "date": "2026-06-21",
+      "date": "2026-06-22",
       "time_nst": "03:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -578,7 +578,7 @@
     },
     {
       "match_id": "537393",
-      "date": "2026-06-22",
+      "date": "2026-06-23",
       "time_nst": "02:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -634,7 +634,7 @@
     },
     {
       "match_id": "537411",
-      "date": "2026-06-23",
+      "date": "2026-06-24",
       "time_nst": "01:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -648,7 +648,7 @@
     },
     {
       "match_id": "537412",
-      "date": "2026-06-23",
+      "date": "2026-06-24",
       "time_nst": "04:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -676,7 +676,7 @@
     },
     {
       "match_id": "537337",
-      "date": "2026-06-24",
+      "date": "2026-06-25",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -690,7 +690,7 @@
     },
     {
       "match_id": "537338",
-      "date": "2026-06-24",
+      "date": "2026-06-25",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -704,7 +704,7 @@
     },
     {
       "match_id": "537344",
-      "date": "2026-06-24",
+      "date": "2026-06-25",
       "time_nst": "03:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -718,7 +718,7 @@
     },
     {
       "match_id": "537343",
-      "date": "2026-06-24",
+      "date": "2026-06-25",
       "time_nst": "03:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -760,7 +760,7 @@
     },
     {
       "match_id": "537355",
-      "date": "2026-06-25",
+      "date": "2026-06-26",
       "time_nst": "01:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -774,7 +774,7 @@
     },
     {
       "match_id": "537356",
-      "date": "2026-06-25",
+      "date": "2026-06-26",
       "time_nst": "01:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -788,7 +788,7 @@
     },
     {
       "match_id": "537361",
-      "date": "2026-06-25",
+      "date": "2026-06-26",
       "time_nst": "04:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -802,7 +802,7 @@
     },
     {
       "match_id": "537362",
-      "date": "2026-06-25",
+      "date": "2026-06-26",
       "time_nst": "04:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -844,7 +844,7 @@
     },
     {
       "match_id": "537395",
-      "date": "2026-06-26",
+      "date": "2026-06-27",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -858,7 +858,7 @@
     },
     {
       "match_id": "537396",
-      "date": "2026-06-26",
+      "date": "2026-06-27",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -928,7 +928,7 @@
     },
     {
       "match_id": "537413",
-      "date": "2026-06-27",
+      "date": "2026-06-28",
       "time_nst": "02:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -942,7 +942,7 @@
     },
     {
       "match_id": "537414",
-      "date": "2026-06-27",
+      "date": "2026-06-28",
       "time_nst": "02:45",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -956,7 +956,7 @@
     },
     {
       "match_id": "537407",
-      "date": "2026-06-27",
+      "date": "2026-06-28",
       "time_nst": "05:15",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -970,7 +970,7 @@
     },
     {
       "match_id": "537408",
-      "date": "2026-06-27",
+      "date": "2026-06-28",
       "time_nst": "05:15",
       "status": "TIMED",
       "stage": "GROUP_STAGE",
@@ -1012,7 +1012,7 @@
     },
     {
       "match_id": "537417",
-      "date": "2026-06-28",
+      "date": "2026-06-29",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "LAST_32",
@@ -1040,7 +1040,7 @@
     },
     {
       "match_id": "537415",
-      "date": "2026-06-29",
+      "date": "2026-06-30",
       "time_nst": "02:15",
       "status": "TIMED",
       "stage": "LAST_32",
@@ -1082,7 +1082,7 @@
     },
     {
       "match_id": "537416",
-      "date": "2026-06-30",
+      "date": "2026-07-01",
       "time_nst": "02:45",
       "status": "TIMED",
       "stage": "LAST_32",
@@ -1124,7 +1124,7 @@
     },
     {
       "match_id": "537422",
-      "date": "2026-07-01",
+      "date": "2026-07-02",
       "time_nst": "01:45",
       "status": "TIMED",
       "stage": "LAST_32",
@@ -1152,7 +1152,7 @@
     },
     {
       "match_id": "537420",
-      "date": "2026-07-02",
+      "date": "2026-07-03",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "LAST_32",
@@ -1166,7 +1166,7 @@
     },
     {
       "match_id": "537419",
-      "date": "2026-07-02",
+      "date": "2026-07-03",
       "time_nst": "04:45",
       "status": "TIMED",
       "stage": "LAST_32",
@@ -1208,7 +1208,7 @@
     },
     {
       "match_id": "537427",
-      "date": "2026-07-03",
+      "date": "2026-07-04",
       "time_nst": "03:45",
       "status": "TIMED",
       "stage": "LAST_32",
@@ -1250,7 +1250,7 @@
     },
     {
       "match_id": "537375",
-      "date": "2026-07-04",
+      "date": "2026-07-05",
       "time_nst": "02:45",
       "status": "TIMED",
       "stage": "LAST_16",
@@ -1264,7 +1264,7 @@
     },
     {
       "match_id": "537377",
-      "date": "2026-07-05",
+      "date": "2026-07-06",
       "time_nst": "01:45",
       "status": "TIMED",
       "stage": "LAST_16",
@@ -1292,7 +1292,7 @@
     },
     {
       "match_id": "537379",
-      "date": "2026-07-06",
+      "date": "2026-07-07",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "LAST_16",
@@ -1334,7 +1334,7 @@
     },
     {
       "match_id": "537382",
-      "date": "2026-07-07",
+      "date": "2026-07-08",
       "time_nst": "01:45",
       "status": "TIMED",
       "stage": "LAST_16",
@@ -1348,7 +1348,7 @@
     },
     {
       "match_id": "537383",
-      "date": "2026-07-09",
+      "date": "2026-07-10",
       "time_nst": "01:45",
       "status": "TIMED",
       "stage": "QUARTER_FINALS",
@@ -1362,7 +1362,7 @@
     },
     {
       "match_id": "537384",
-      "date": "2026-07-10",
+      "date": "2026-07-11",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "QUARTER_FINALS",
@@ -1376,7 +1376,7 @@
     },
     {
       "match_id": "537385",
-      "date": "2026-07-11",
+      "date": "2026-07-12",
       "time_nst": "02:45",
       "status": "TIMED",
       "stage": "QUARTER_FINALS",
@@ -1404,20 +1404,6 @@
     },
     {
       "match_id": "537387",
-      "date": "2026-07-14",
-      "time_nst": "00:45",
-      "status": "TIMED",
-      "stage": "SEMI_FINALS",
-      "group": null,
-      "team_home": null,
-      "team_home_crest": null,
-      "team_away": null,
-      "team_away_crest": null,
-      "goals_home": null,
-      "goals_away": null
-    },
-    {
-      "match_id": "537388",
       "date": "2026-07-15",
       "time_nst": "00:45",
       "status": "TIMED",
@@ -1431,8 +1417,22 @@
       "goals_away": null
     },
     {
+      "match_id": "537388",
+      "date": "2026-07-16",
+      "time_nst": "00:45",
+      "status": "TIMED",
+      "stage": "SEMI_FINALS",
+      "group": null,
+      "team_home": null,
+      "team_home_crest": null,
+      "team_away": null,
+      "team_away_crest": null,
+      "goals_home": null,
+      "goals_away": null
+    },
+    {
       "match_id": "537389",
-      "date": "2026-07-18",
+      "date": "2026-07-19",
       "time_nst": "02:45",
       "status": "TIMED",
       "stage": "THIRD_PLACE",
@@ -1446,7 +1446,7 @@
     },
     {
       "match_id": "537390",
-      "date": "2026-07-19",
+      "date": "2026-07-20",
       "time_nst": "00:45",
       "status": "TIMED",
       "stage": "FINAL",

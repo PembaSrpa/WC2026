@@ -27,10 +27,10 @@ FIXTURES_DIRS = [
 NST_OFFSET = timedelta(hours=5, minutes=45)
 
 
-def utc_to_nst(utc_str: str) -> str:
+def parse_utc_to_nst(utc_str: str) -> datetime:
+    """Parses a UTC string and returns an NST-adjusted datetime object."""
     utc_dt = datetime.strptime(utc_str, "%Y-%m-%dT%H:%M:%SZ")
-    nst_dt = utc_dt + NST_OFFSET
-    return nst_dt.strftime("%H:%M")
+    return utc_dt + NST_OFFSET
 
 
 def fetch_and_save_fixtures() -> None:
@@ -53,10 +53,12 @@ def fetch_and_save_fixtures() -> None:
     rows = []
     for m in matches:
         score = m.get("score", {}).get("fullTime", {})
+        nst_dt = parse_utc_to_nst(m["utcDate"])
+        
         rows.append({
             "match_id": str(m["id"]),
-            "date": m["utcDate"][:10],
-            "time_nst": utc_to_nst(m["utcDate"]),
+            "date": nst_dt.strftime("%Y-%m-%d"),
+            "time_nst": nst_dt.strftime("%H:%M"),
             "status": m.get("status", ""),
             "stage": m.get("stage", ""),
             "group": m.get("group", ""),
