@@ -53,4 +53,15 @@ export const STAGE_LABEL: Record<MatchStage, string> = {
   FINAL: "Final",
 };
 
+export interface LeaderboardRow {
+  rank: number;
+  user_id: string;
+  username: string;
+  is_model: boolean;
+  model_color?: string;
+  cumulative_rps: number;
+  matches_predicted: number;
+  accuracy: number;
+}
+
 export const KNOCKOUT_STAGES: MatchStage[] = ["LAST_32","LAST_16","QUARTER_FINALS","SEMI_FINALS","FINAL"];
