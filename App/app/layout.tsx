@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body style={{ background:"#171717",color:"#e5e5e5",fontFamily:"'JetBrains Mono',monospace" }}>
         <Scales />
         <Nav />
-        <main style={{ maxWidth:960,margin:"0 auto",padding:"24px 48px" }}>
+        <main style={{ maxWidth:960,margin:"0 auto",padding:"24px calc(5vw + 16px)" }}>
           {children}
         </main>
       </body>

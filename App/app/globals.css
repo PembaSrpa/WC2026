@@ -14,8 +14,15 @@ body {
 ::-webkit-scrollbar-track { background: #171717; }
 ::-webkit-scrollbar-thumb { background: #404040; border-radius: 3px; }
 
-@media (max-width: 640px) {
-  main { padding: 16px 20px !important; }
-  nav { padding: 0 20px !important; }
-  .scale-l, .scale-r { width: 12px !important; }
+.tab-full { display: none; }
+.tab-short { display: inline; }
+
+@media (min-width: 640px) {
+  .tab-full { display: inline; }
+  .tab-short { display: none; }
+  .nav-tagline { display: block !important; }
+}
+
+@media (max-width: 639px) {
+  .nav-tagline { display: none !important; }
 }
