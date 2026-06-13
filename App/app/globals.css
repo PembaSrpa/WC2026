@@ -32,3 +32,12 @@ body {
 @media (min-width: 640px) {
   .groups-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+.model-cards-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 640px) {
+  .model-cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.lb-hide-mobile { display: none; }
+@media (min-width: 640px) {
+  .lb-hide-mobile { display: table-cell; }
+}
