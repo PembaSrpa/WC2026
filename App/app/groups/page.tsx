@@ -40,7 +40,7 @@ export default function GroupsPage() {
       {loading ? (
         <div style={{ textAlign:"center" as const,padding:"60px 0",fontSize:11,color:"#a3a3a3",fontFamily:F }}>loading...</div>
       ) : (
-        <div style={{ display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:12 }}>
+        <div className="groups-grid">
           {Object.entries(grouped).sort().map(([group,matches])=>(
             <GroupTable key={group} group={group.replace("GROUP_","")} matches={matches} />
           ))}
