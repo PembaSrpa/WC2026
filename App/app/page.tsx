@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { MatchCard } from "@/components/MatchCard";
 import { fetchFixtures, enrichFixtures } from "@/lib/data";
 import type { EnrichedMatch } from "@/lib/types";
@@ -12,6 +12,7 @@ export default function MatchesPage() {
   const [matches, setMatches] = useState<EnrichedMatch[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date|null>(null);
+  const nextRef = useRef<HTMLDivElement>(null);
 
   const load = useCallback(async () => {
     const fixtures = await fetchFixtures();
@@ -28,6 +29,12 @@ export default function MatchesPage() {
     const id = setInterval(load, POLL_MS);
     return () => clearInterval(id);
   }, [load]);
+
+  useEffect(() => {
+    if (!loading && nextRef.current) {
+      nextRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [loading]);
 
   const finished = matches.filter(m=>m.status==="FINISHED").length;
   const next = matches.find(m=>m.status==="TIMED"||m.status==="SCHEDULED");
@@ -57,7 +64,14 @@ export default function MatchesPage() {
         <div style={{ textAlign:"center" as const,padding:"60px 0",fontSize:11,color:"#a3a3a3",fontFamily:F }}>loading fixtures...</div>
       ) : (
         <div style={{ display:"flex",flexDirection:"column" as const,gap:8 }}>
-          {matches.map(m=><MatchCard key={m.match_id} match={m} />)}
+          {matches.map(m => {
+            const isNext = (m.status==="TIMED"||m.status==="SCHEDULED") && m.match_id===next?.match_id;
+            return (
+              <div key={m.match_id} ref={isNext ? nextRef : null}>
+                <MatchCard match={m} />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
