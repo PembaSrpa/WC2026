@@ -170,43 +170,41 @@ export default function LeaderboardPage() {
 
           <div style={{ fontSize:11,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1.5,color:"#a3a3a3",marginBottom:12,fontFamily:F }}>Per Match Breakdown</div>
           <div style={{ border:"1px solid #404040",borderRadius:8,overflow:"hidden",background:"#262626" }}>
-            <div style={{ overflowX:"auto" as const }}>
-              <table style={{ width:"100%",borderCollapse:"collapse" as const,minWidth:420 }}>
-                <thead>
-                  <tr style={{ borderBottom:"1px solid #404040" }}>
-                    <th style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"left" as const,fontFamily:F }}>Match</th>
-                    <th className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"left" as const,fontFamily:F }}>Date</th>
-                    <th className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"left" as const,fontFamily:F }}>Result</th>
-                    <th style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"center" as const,fontFamily:F }}>Sunless</th>
-                    <th style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"center" as const,fontFamily:F }}>Frank</th>
-                    <th style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"center" as const,fontFamily:F }}>Winner</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {matchRPS.map(r=>{
-                    const sunlessWins = r.sunless_rps!==null&&r.frank_rps!==null&&r.sunless_rps<r.frank_rps;
-                    const frankWins = r.sunless_rps!==null&&r.frank_rps!==null&&r.frank_rps<r.sunless_rps;
-                    return (
-                      <tr key={r.match_id} style={{ borderTop:"1px solid #333",transition:"background 0.1s" }}
-                        onMouseEnter={e=>(e.currentTarget.style.background="#2a2a2a")}
-                        onMouseLeave={e=>(e.currentTarget.style.background="transparent")}
-                      >
-                        <td style={{ padding:"10px 14px",fontSize:11,color:"#f5f5f5",fontFamily:F }}>{toCode(r.team_home)} vs {toCode(r.team_away)}</td>
-                        <td className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:11,color:"#a3a3a3",fontFamily:F }}>{r.date}</td>
-                        <td className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:11,color:"#d4d4d4",fontFamily:F,textTransform:"uppercase" as const }}>{r.outcome}</td>
-                        <td style={{ padding:"10px 14px",fontSize:13,fontWeight:700,textAlign:"center" as const,color:sunlessWins?"#60a5fa":"#d4d4d4",fontFamily:F }}>{r.sunless_rps!==null?r.sunless_rps.toFixed(3):"—"}</td>
-                        <td style={{ padding:"10px 14px",fontSize:13,fontWeight:700,textAlign:"center" as const,color:frankWins?"#f87171":"#d4d4d4",fontFamily:F }}>{r.frank_rps!==null?r.frank_rps.toFixed(3):"—"}</td>
-                        <td style={{ padding:"10px 14px",textAlign:"center" as const,fontFamily:F }}>
-                          {sunlessWins&&<span style={{ fontSize:10,fontWeight:700,color:"#60a5fa" }}>SUNLESS</span>}
-                          {frankWins&&<span style={{ fontSize:10,fontWeight:700,color:"#f87171" }}>FRANK</span>}
-                          {!sunlessWins&&!frankWins&&<span style={{ fontSize:10,color:"#a3a3a3" }}>TIE</span>}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            <table style={{ width:"100%",borderCollapse:"collapse" as const }}>
+              <thead>
+                <tr style={{ borderBottom:"1px solid #404040" }}>
+                  <th style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"left" as const,fontFamily:F }}>Match</th>
+                  <th className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"left" as const,fontFamily:F }}>Date</th>
+                  <th className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"left" as const,fontFamily:F }}>Result</th>
+                  <th style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"center" as const,fontFamily:F }}>Sunless</th>
+                  <th style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"center" as const,fontFamily:F }}>Frank</th>
+                  <th className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"center" as const,fontFamily:F }}>Winner</th>
+                </tr>
+              </thead>
+              <tbody>
+                {matchRPS.map(r=>{
+                  const sunlessWins = r.sunless_rps!==null&&r.frank_rps!==null&&r.sunless_rps<r.frank_rps;
+                  const frankWins = r.sunless_rps!==null&&r.frank_rps!==null&&r.frank_rps<r.sunless_rps;
+                  return (
+                    <tr key={r.match_id} style={{ borderTop:"1px solid #333",transition:"background 0.1s" }}
+                      onMouseEnter={e=>(e.currentTarget.style.background="#2a2a2a")}
+                      onMouseLeave={e=>(e.currentTarget.style.background="transparent")}
+                    >
+                      <td style={{ padding:"10px 14px",fontSize:11,color:"#f5f5f5",fontFamily:F }}>{toCode(r.team_home)} vs {toCode(r.team_away)}</td>
+                      <td className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:11,color:"#a3a3a3",fontFamily:F }}>{r.date}</td>
+                      <td className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:11,color:"#d4d4d4",fontFamily:F,textTransform:"uppercase" as const }}>{r.outcome}</td>
+                      <td style={{ padding:"10px 14px",fontSize:13,fontWeight:700,textAlign:"center" as const,color:sunlessWins?"#60a5fa":"#d4d4d4",fontFamily:F }}>{r.sunless_rps!==null?r.sunless_rps.toFixed(3):"—"}</td>
+                      <td style={{ padding:"10px 14px",fontSize:13,fontWeight:700,textAlign:"center" as const,color:frankWins?"#f87171":"#d4d4d4",fontFamily:F }}>{r.frank_rps!==null?r.frank_rps.toFixed(3):"—"}</td>
+                      <td className="lb-hide-mobile" style={{ padding:"10px 14px",textAlign:"center" as const,fontFamily:F }}>
+                        {sunlessWins&&<span style={{ fontSize:10,fontWeight:700,color:"#60a5fa" }}>SUNLESS</span>}
+                        {frankWins&&<span style={{ fontSize:10,fontWeight:700,color:"#f87171" }}>FRANK</span>}
+                        {!sunlessWins&&!frankWins&&<span style={{ fontSize:10,color:"#a3a3a3" }}>TIE</span>}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </>
       )}
