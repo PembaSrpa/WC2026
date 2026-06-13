@@ -8,6 +8,61 @@ const F = "'JetBrains Mono',monospace";
 const GOLD = "#C9A84C";
 const POLL_MS = 60 * 60 * 1000;
 
+const TEAM_CODE: Record<string, string> = {
+  "Algeria":"ALG",
+  "Argentina":"ARG",
+  "Australia":"AUS",
+  "Austria":"AUT",
+  "Belgium":"BEL",
+  "Bosnia-Herzegovina":"BIH",
+  "Brazil":"BRA",
+  "Canada":"CAN",
+  "Cape Verde Islands":"CPV",
+  "Colombia":"COL",
+  "Congo DR":"COD",
+  "Croatia":"CRO",
+  "Curaçao":"CUW",
+  "Czechia":"CZE",
+  "Ecuador":"ECU",
+  "Egypt":"EGY",
+  "England":"ENG",
+  "France":"FRA",
+  "Germany":"GER",
+  "Ghana":"GHA",
+  "Haiti":"HAI",
+  "Iran":"IRN",
+  "Iraq":"IRQ",
+  "Ivory Coast":"CIV",
+  "Japan":"JPN",
+  "Jordan":"JOR",
+  "Mexico":"MEX",
+  "Morocco":"MAR",
+  "Netherlands":"NED",
+  "New Zealand":"NZL",
+  "Norway":"NOR",
+  "Panama":"PAN",
+  "Paraguay":"PAR",
+  "Portugal":"POR",
+  "Qatar":"QAT",
+  "Saudi Arabia":"KSA",
+  "Scotland":"SCO",
+  "Senegal":"SEN",
+  "South Africa":"RSA",
+  "South Korea":"KOR",
+  "Spain":"ESP",
+  "Sweden":"SWE",
+  "Switzerland":"SUI",
+  "Tunisia":"TUN",
+  "Turkey":"TUR",
+  "United States":"USA",
+  "Uruguay":"URU",
+  "Uzbekistan":"UZB",
+};
+
+function toCode(name: string): string {
+  return TEAM_CODE[name] ?? name.slice(0, 3).toUpperCase();
+}
+
 type ModelStat = {
   name: string;
   color: ModelColor;
@@ -136,7 +191,7 @@ export default function LeaderboardPage() {
                         onMouseEnter={e=>(e.currentTarget.style.background="#2a2a2a")}
                         onMouseLeave={e=>(e.currentTarget.style.background="transparent")}
                       >
-                        <td style={{ padding:"10px 14px",fontSize:11,color:"#f5f5f5",fontFamily:F }}>{r.team_home} vs {r.team_away}</td>
+                        <td style={{ padding:"10px 14px",fontSize:11,color:"#f5f5f5",fontFamily:F }}>{toCode(r.team_home)} vs {toCode(r.team_away)}</td>
                         <td className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:11,color:"#a3a3a3",fontFamily:F }}>{r.date}</td>
                         <td className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:11,color:"#d4d4d4",fontFamily:F,textTransform:"uppercase" as const }}>{r.outcome}</td>
                         <td style={{ padding:"10px 14px",fontSize:13,fontWeight:700,textAlign:"center" as const,color:sunlessWins?"#60a5fa":"#d4d4d4",fontFamily:F }}>{r.sunless_rps!==null?r.sunless_rps.toFixed(3):"—"}</td>
