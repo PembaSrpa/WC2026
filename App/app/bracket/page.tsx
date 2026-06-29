@@ -33,7 +33,6 @@ export default function BracketPage() {
     <div>
       <div style={{ display:"flex",alignItems:"baseline",gap:10,marginBottom:24 }}>
         <h1 style={{ fontSize:20,fontWeight:700,letterSpacing:1,color:"#f5f5f5",fontFamily:F }}>Knockout Bracket</h1>
-        <span style={{ fontSize:10,color:"#a3a3a3",fontFamily:F }}>Sunless model win % shown</span>
       </div>
       {loading ? (
         <div style={{ textAlign:"center" as const,padding:"60px 0",fontSize:11,color:"#a3a3a3",fontFamily:F }}>loading...</div>
