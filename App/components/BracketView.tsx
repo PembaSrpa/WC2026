@@ -1,30 +1,29 @@
 "use client";
-import type { EnrichedMatch, MatchStage } from "@/lib/types";
+import type { EnrichedMatch } from "@/lib/types";
 import { STAGE_LABEL, KNOCKOUT_STAGES } from "@/lib/types";
 
 const F = "'JetBrains Mono',monospace";
 
 function BracketMatch({ match }: { match: EnrichedMatch }) {
-  const isDone = match.status==="FINISHED";
-  const homeWon = isDone && match.goals_home!>match.goals_away!;
-  const awayWon = isDone && match.goals_away!>match.goals_home!;
+  const isDone = match.status === "FINISHED";
+  const homeWon = isDone && match.goals_home! > match.goals_away!;
+  const awayWon = isDone && match.goals_away! > match.goals_home!;
 
-  function Row({ name, crest, won, prob }: { name:string; crest:string; won:boolean; prob:number|null }) {
+  function Row({ name, crest, won }: { name: string; crest: string; won: boolean }) {
     return (
-      <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",padding:"7px 10px",borderBottom:"1px solid #333",fontSize:11,fontFamily:F,background:won?"#333":"transparent",color:won?"#f5f5f5":"#d4d4d4",fontWeight:won?600:400 }}>
+      <div style={{ display:"flex",alignItems:"center",padding:"7px 10px",borderBottom:"1px solid #333",fontSize:11,fontFamily:F,background:won?"#333":"transparent",color:won?"#f5f5f5":"#d4d4d4",fontWeight:won?600:400 }}>
         <div style={{ display:"flex",alignItems:"center",gap:6,minWidth:0 }}>
           <img src={crest} alt={name} width={13} height={13} style={{ objectFit:"contain",flexShrink:0 }} onError={e=>(e.currentTarget.style.visibility="hidden")} />
           <span style={{ overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap" as const }}>{name}</span>
         </div>
-        {prob!==null&&<span style={{ fontSize:10,color:"#a3a3a3",fontFamily:F,flexShrink:0,marginLeft:6 }}>{(prob*100).toFixed(0)}%</span>}
       </div>
     );
   }
 
   return (
     <div style={{ border:"1px solid #404040",borderRadius:6,overflow:"hidden",background:"#262626" }}>
-      <Row name={match.team_home} crest={match.team_home_crest} won={homeWon} prob={match.sunless?.p_win??null} />
-      <Row name={match.team_away} crest={match.team_away_crest} won={awayWon} prob={match.sunless?.p_loss??null} />
+      <Row name={match.team_home} crest={match.team_home_crest} won={homeWon} />
+      <Row name={match.team_away} crest={match.team_away_crest} won={awayWon} />
     </div>
   );
 }
