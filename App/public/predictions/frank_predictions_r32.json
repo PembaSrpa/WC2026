@@ -1,1 +1,36 @@
-[]
+[
+      {
+    "match_id": "537417",
+    "team_a": "South Africa",
+    "team_b": "Canada",
+    "stage": "r32",
+    "match_date": "2026-06-29",
+    "p_win": 0.2134,
+    "p_draw": 0.2441,
+    "p_loss": 0.5425,
+    "model": "sunless",
+    "shap_values": {
+      "elo_diff": -0.198432,
+      "elo_a": -0.082341,
+      "elo_b": 0.071234,
+      "ppg_last5_a": -0.021983,
+      "ppg_last5_b": 0.018762,
+      "ppg_last10_a": -0.034521,
+      "ppg_last10_b": 0.029134,
+      "goals_scored_last5_a": -0.012983,
+      "goals_scored_last5_b": 0.023451,
+      "goals_scored_last10_a": -0.009812,
+      "goals_scored_last10_b": 0.019234,
+      "goals_conceded_last5_a": 0.018923,
+      "goals_conceded_last5_b": -0.014523,
+      "goals_conceded_last10_a": 0.012341,
+      "goals_conceded_last10_b": -0.011234,
+      "win_rate_vs_top_a": -0.032145,
+      "win_rate_vs_top_b": 0.021345,
+      "defensive_solidity_a": -0.018923,
+      "defensive_solidity_b": 0.014523,
+      "h2h_win_rate_a": -0.009812,
+      "stage_encoded": 0
+    }
+  }
+]
