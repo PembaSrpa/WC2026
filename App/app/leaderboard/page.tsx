@@ -2,7 +2,26 @@
 import { useEffect, useState, useCallback } from "react";
 import { fetchFixtures, fetchPredictions, computeRPS } from "@/lib/data";
 import { modelTextColor } from "@/lib/utils";
-import type { ModelColor } from "@/lib/types";
+import type { ModelColor, MatchStage } from "@/lib/types";
+import { STAGE_MAP } from "@/lib/types";
+
+const ALL_STAGES: MatchStage[] = [
+  "GROUP_STAGE",
+  "LAST_32",
+  "LAST_16",
+  "QUARTER_FINALS",
+  "SEMI_FINALS",
+  "FINAL",
+];
+
+const STAGE_SHORT: Record<MatchStage, string> = {
+  GROUP_STAGE: "GRP",
+  LAST_32: "R32",
+  LAST_16: "R16",
+  QUARTER_FINALS: "QF",
+  SEMI_FINALS: "SF",
+  FINAL: "F",
+};
 
 const F = "'JetBrains Mono',monospace";
 const GOLD = "#C9A84C";
@@ -74,6 +93,7 @@ type ModelStat = {
 type MatchRPS = {
   match_id: string;
   date: string;
+  stage: MatchStage;
   team_home: string;
   team_away: string;
   outcome: string;
@@ -88,15 +108,29 @@ export default function LeaderboardPage() {
 
   const load = useCallback(async () => {
     const fixtures = await fetchFixtures();
-    const finished = fixtures.filter(f=>f.status==="FINISHED"&&f.stage==="GROUP_STAGE");
+    const finished = fixtures.filter(f => f.status === "FINISHED");
     if (!finished.length) { setLoading(false); return; }
 
-    const [sunless, frank] = await Promise.all([
-      fetchPredictions("sunless","group"),
-      fetchPredictions("frank","group"),
-    ]);
-    const sm = Object.fromEntries(sunless.map(p=>[p.match_id,p]));
-    const fm = Object.fromEntries(frank.map(p=>[p.match_id,p]));
+    // Fetch predictions for every stage that has finished matches
+    const stagesNeeded = ALL_STAGES.filter(stage =>
+      finished.some(f => f.stage === stage)
+    );
+
+    const predictionPairs = await Promise.all(
+      stagesNeeded.map(stage =>
+        Promise.all([
+          fetchPredictions("sunless", STAGE_MAP[stage]),
+          fetchPredictions("frank", STAGE_MAP[stage]),
+        ])
+      )
+    );
+
+    const sm: Record<string, any> = {};
+    const fm: Record<string, any> = {};
+    predictionPairs.forEach(([sunlessArr, frankArr]) => {
+      sunlessArr.forEach(p => { sm[p.match_id] = p; });
+      frankArr.forEach(p => { fm[p.match_id] = p; });
+    });
 
     let sunlessTotal=0, frankTotal=0, sunlessN=0, frankN=0;
     const rows: MatchRPS[] = [];
@@ -110,7 +144,7 @@ export default function LeaderboardPage() {
       const frps = fp ? computeRPS([fp.p_win,fp.p_draw,fp.p_loss], outcome) : null;
       if (srps!==null){sunlessTotal+=srps;sunlessN++;}
       if (frps!==null){frankTotal+=frps;frankN++;}
-      rows.push({ match_id:f.match_id, date:f.date, team_home:f.team_home, team_away:f.team_away, outcome, sunless_rps:srps, frank_rps:frps });
+      rows.push({ match_id:f.match_id, date:f.date, stage:f.stage, team_home:f.team_home, team_away:f.team_away, outcome, sunless_rps:srps, frank_rps:frps });
     }
 
     rows.sort((a,b)=>new Date(b.date).getTime()-new Date(a.date).getTime());
@@ -174,6 +208,7 @@ export default function LeaderboardPage() {
               <thead>
                 <tr style={{ borderBottom:"1px solid #404040" }}>
                   <th style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"left" as const,fontFamily:F }}>Match</th>
+                  <th className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"left" as const,fontFamily:F }}>Stage</th>
                   <th className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"left" as const,fontFamily:F }}>Date</th>
                   <th className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"left" as const,fontFamily:F }}>Result</th>
                   <th style={{ padding:"10px 14px",fontSize:9,fontWeight:700,textTransform:"uppercase" as const,letterSpacing:1,color:"#a3a3a3",textAlign:"center" as const,fontFamily:F }}>Sunless</th>
@@ -191,6 +226,7 @@ export default function LeaderboardPage() {
                       onMouseLeave={e=>(e.currentTarget.style.background="transparent")}
                     >
                       <td style={{ padding:"10px 14px",fontSize:11,color:"#f5f5f5",fontFamily:F }}>{toCode(r.team_home)} vs {toCode(r.team_away)}</td>
+                      <td className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:10,color:"#737373",fontFamily:F,textTransform:"uppercase" as const }}>{STAGE_SHORT[r.stage]}</td>
                       <td className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:11,color:"#a3a3a3",fontFamily:F }}>{r.date}</td>
                       <td className="lb-hide-mobile" style={{ padding:"10px 14px",fontSize:11,color:"#d4d4d4",fontFamily:F,textTransform:"uppercase" as const }}>{r.outcome}</td>
                       <td style={{ padding:"10px 14px",fontSize:13,fontWeight:700,textAlign:"center" as const,color:sunlessWins?"#60a5fa":"#d4d4d4",fontFamily:F }}>{r.sunless_rps!==null?r.sunless_rps.toFixed(3):"—"}</td>
