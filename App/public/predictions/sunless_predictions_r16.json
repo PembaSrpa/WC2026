@@ -33,7 +33,7 @@
     }
   },
   {
-    "match_id": "537377",
+    "match_id": "537375",
     "team_a": "France",
     "team_b": "Paraguay",
     "stage": "r16",
@@ -62,6 +62,39 @@
       "defensive_solidity_a": 0.031045,
       "defensive_solidity_b": 0.012485,
       "h2h_win_rate_a": 0.038415,
+      "stage_encoded": 0.0
+    }
+  },
+  {
+    "match_id": "537377",
+    "team_a": "Brazil",
+    "team_b": "Norway",
+    "stage": "r16",
+    "match_date": "2026-07-05",
+    "p_win": 0.4618,
+    "p_draw": 0.2654,
+    "p_loss": 0.2728,
+    "shap_values": {
+      "elo_diff": 0.184321,
+      "elo_a": 0.061245,
+      "elo_b": 0.011478,
+      "ppg_last5_a": 0.024512,
+      "ppg_last5_b": -0.018435,
+      "ppg_last10_a": 0.035124,
+      "ppg_last10_b": 0.014258,
+      "goals_scored_last5_a": 0.048215,
+      "goals_scored_last5_b": 0.031245,
+      "goals_scored_last10_a": 0.021546,
+      "goals_scored_last10_b": -0.015243,
+      "goals_conceded_last5_a": -0.021452,
+      "goals_conceded_last5_b": -0.052148,
+      "goals_conceded_last10_a": 0.014251,
+      "goals_conceded_last10_b": 0.041025,
+      "win_rate_vs_top_a": 0.025147,
+      "win_rate_vs_top_b": -0.032145,
+      "defensive_solidity_a": 0.018942,
+      "defensive_solidity_b": -0.009415,
+      "h2h_win_rate_a": -0.011425,
       "stage_encoded": 0.0
     }
   },
