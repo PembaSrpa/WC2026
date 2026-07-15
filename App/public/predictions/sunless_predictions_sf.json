@@ -6,8 +6,8 @@
     "stage": "sf",
     "match_date": "2026-07-14",
     "p_win": 0.3804,
-    "p_draw": 0.3841,
-    "p_loss": 0.2356,
+    "p_draw": 0.2356,
+    "p_loss": 0.3841,
     "shap_values": {
       "elo_diff": -0.097115,
       "elo_a": 0.079524,
@@ -39,8 +39,8 @@
     "stage": "sf",
     "match_date": "2026-07-15",
     "p_win": 0.3423,
-    "p_draw": 0.3628,
-    "p_loss": 0.2949,
+    "p_draw": 0.2949,
+    "p_loss": 0.3628,
     "shap_values": {
       "elo_diff": -0.067565,
       "elo_a": 0.051164,
