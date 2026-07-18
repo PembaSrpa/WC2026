@@ -5,9 +5,9 @@
     "team_b": "Argentina",
     "stage": "final",
     "match_date": "2026-07-19",
-    "p_win": 0.2647,
-    "p_draw": 0.5699,
-    "p_loss": 0.1654,
+    "p_win": 0.5496,
+    "p_draw": 0.0,
+    "p_loss": 0.4503,
     "shap_values": {
       "elo_diff": -0.012042,
       "elo_a": -0.014845,

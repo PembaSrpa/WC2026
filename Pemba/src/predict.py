@@ -40,11 +40,25 @@ def predict_fixtures(
     raw = np.column_stack([models[t].predict(X) for t in TARGETS])
     norm = normalize_preds(raw)
 
+    is_knockout = stage != "group"
+
     results: list[dict] = []
     for i, fix in enumerate(fixtures):
-        p_win = round(float(norm[i, 0]), 4)
-        p_draw = round(float(norm[i, 1]), 4)
-        p_loss = round(float(norm[i, 2]), 4)
+        p_win = float(norm[i, 0])
+        p_draw = float(norm[i, 1])
+        p_loss = float(norm[i, 2])
+
+        if is_knockout:
+            # Knockout matches can't end in a draw, so the draw
+            # probability is split evenly between win and loss.
+            half_draw = p_draw / 2.0
+            p_win += half_draw
+            p_loss += half_draw
+            p_draw = 0.0
+
+        p_win = round(p_win, 4)
+        p_draw = round(p_draw, 4)
+        p_loss = round(p_loss, 4)
         shap_vals = _shap_for_match(explainers, X[i:i + 1], FEATURE_COLS)
 
         results.append({
