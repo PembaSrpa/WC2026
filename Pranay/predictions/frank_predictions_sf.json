@@ -1,1 +1,60 @@
-[]
+[
+  {
+    "match_id": "537387",
+    "team_a": "France",
+    "team_b": "Spain",
+    "stage": "sf",
+    "match_date": "2026-07-15",
+    "p_win": 0.3928,
+    "p_draw": 0.056,
+    "p_loss": 0.5512,
+    "model": "frank",
+    "shap_values": {
+      "elo_diff": -0.3904,
+      "elo_a": 0.104,
+      "elo_b": -0.482,
+      "form_win_a": 0.008,
+      "form_draw_a": 0.0274,
+      "form_gf_a": 0.4577,
+      "form_ga_a": -1.1296,
+      "form_win_b": 0.0093,
+      "form_draw_b": -0.0703,
+      "form_gf_b": -0.1259,
+      "form_ga_b": 1.1166,
+      "h2h_win_rate": 0.1237,
+      "h2h_draw_rate": 0.0134,
+      "h2h_games": 0.3395,
+      "stage_importance": 0.1008,
+      "neutral": -0.2825
+    }
+  },
+  {
+    "match_id": "537388",
+    "team_a": "England",
+    "team_b": "Argentina",
+    "stage": "sf",
+    "match_date": "2026-07-16",
+    "p_win": 0.4692,
+    "p_draw": 0.0664,
+    "p_loss": 0.4644,
+    "model": "frank",
+    "shap_values": {
+      "elo_diff": 0.1969,
+      "elo_a": 0.1548,
+      "elo_b": -0.3439,
+      "form_win_a": -0.15,
+      "form_draw_a": 0.0035,
+      "form_gf_a": 0.4758,
+      "form_ga_a": -1.1339,
+      "form_win_b": 0.0279,
+      "form_draw_b": -0.0737,
+      "form_gf_b": -0.1666,
+      "form_ga_b": 1.2494,
+      "h2h_win_rate": 0.1067,
+      "h2h_draw_rate": -0.0309,
+      "h2h_games": -0.0385,
+      "stage_importance": 0.0451,
+      "neutral": -0.3873
+    }
+  }
+]

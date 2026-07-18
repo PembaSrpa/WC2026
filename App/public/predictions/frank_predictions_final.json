@@ -1,1 +1,31 @@
-[]
+[
+  {
+    "match_id": "537390",
+    "team_a": "Spain",
+    "team_b": "Argentina",
+    "stage": "final",
+    "match_date": "2026-07-20",
+    "p_win": 0.6235,
+    "p_draw": 0.0567,
+    "p_loss": 0.3198,
+    "model": "frank",
+    "shap_values": {
+      "elo_diff": 0.5539,
+      "elo_a": 0.0579,
+      "elo_b": -0.2984,
+      "form_win_a": -0.0982,
+      "form_draw_a": 0.0365,
+      "form_gf_a": 0.4481,
+      "form_ga_a": -1.0047,
+      "form_win_b": 0.0576,
+      "form_draw_b": -0.0393,
+      "form_gf_b": -0.0464,
+      "form_ga_b": 1.1575,
+      "h2h_win_rate": 0.0696,
+      "h2h_draw_rate": -0.0034,
+      "h2h_games": -0.0674,
+      "stage_importance": 0.0127,
+      "neutral": -0.3113
+    }
+  }
+]
