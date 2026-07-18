@@ -1,1 +1,35 @@
-[]
+[
+  {
+    "match_id": "537390",
+    "team_a": "Spain",
+    "team_b": "Argentina",
+    "stage": "final",
+    "match_date": "2026-07-19",
+    "p_win": 0.2647,
+    "p_draw": 0.5699,
+    "p_loss": 0.1654,
+    "shap_values": {
+      "elo_diff": -0.012042,
+      "elo_a": -0.014845,
+      "elo_b": 0.001563,
+      "ppg_last5_a": -0.02689,
+      "ppg_last5_b": 0.008455,
+      "ppg_last10_a": -0.024735,
+      "ppg_last10_b": 0.027223,
+      "goals_scored_last5_a": 0.009773,
+      "goals_scored_last5_b": 0.002848,
+      "goals_scored_last10_a": 0.019517,
+      "goals_scored_last10_b": -0.013135,
+      "goals_conceded_last5_a": 0.018579,
+      "goals_conceded_last5_b": -0.031153,
+      "goals_conceded_last10_a": 0.013698,
+      "goals_conceded_last10_b": 0.020928,
+      "win_rate_vs_top_a": -0.047576,
+      "win_rate_vs_top_b": -0.02074,
+      "defensive_solidity_a": -0.001098,
+      "defensive_solidity_b": -0.018367,
+      "h2h_win_rate_a": -0.036748,
+      "stage_encoded": 0.0
+    }
+  }
+]
